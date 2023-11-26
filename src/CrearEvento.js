@@ -1,19 +1,18 @@
-import { useState, useRef } from "react";
-import { Await, Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Button } from "bootstrap";
 
 const CrearEvento = () => {
-
-    const inputInvitado = useRef(0);
     const [tematica, setTematica] = useState("");
     const [lugar, setLugar] = useState("");
     const [fecha, setFecha] = useState("");
     const [direccion, setDireccion] = useState("");
     const [hora, setHora] = useState("");
-    const [evento, setEvento] = useState({});
     const [invitados, setInvitados] = useState([]);
     const [invitado, setInvitado] = useState({});
+    console.log(invitados);
+
+    console.log(tematica);
 
 
 
@@ -49,6 +48,7 @@ const CrearEvento = () => {
     let token = localStorage.getItem('token');
 
     const handleSearch = async (e) =>{console.log(invitado);
+        e.preventDefault();
         const response = await fetch(`${process.env.REACT_APP_API}/usuario/buscar`, {
             method: "POST",
             headers:{  
@@ -63,26 +63,20 @@ const CrearEvento = () => {
     }
 
     const handlesubmit = (e) => {
-            e.preventDefault();
-            setEvento({
-                tematica:tematica,
-                lugar:lugar,
-                fecha:fecha,
-                direccion:direccion,
-                hora:hora,
-                anfitrion:localStorage.getItem('userId'),
-                lista_invitados: invitados
-            })
-
-            if (IsValidate()) {
-                console.log(evento);
+        e.preventDefault();
+        const lista_invitados = invitados.map(({fullName, ...rest}) => rest);
+        const anfitrion = localStorage.getItem('userId');
+        const obj = {tematica,lugar,fecha,hora,direccion,anfitrion, lista_invitados }
+        console.log('obj ==> ', obj);
+        if (IsValidate()) {
+            
             fetch(`${process.env.REACT_APP_API}/evento/crear`, {
                 method: "POST",
                 headers:{  
                     'content-type': 'application/json',
                     'Authorization': 'bearer ' + token
                 },
-                body: JSON.stringify(evento)
+                body: JSON.stringify(obj)
             }).then((res) => {
                 toast.success('Registro Exitoso')
                 navigate('/dashboard');
@@ -137,23 +131,28 @@ const CrearEvento = () => {
                                 <div className="col-lg-6">
                                     <div className="form-group">
                                         <label>Buscar Invitado <span className="errmsg">*</span></label>
-                                        <input onChange={e => setInvitado(e.target.value)} className="form-control"></input>
-                                        <div>
-                                            {
-                                              <div value={invitado} key ={invitado} onClick={(e)=>{setInvitados({invitado: e._id, estado:'pendiente' })}}>
-
+                                        <input  onChange={e => setInvitado(e.target.value)} className="form-control"></input>                
+                                              <div>
+                                                    <input defaultValue={invitado && invitado.nombre ? invitado.nombre + ' ' + invitado.apellido: ''} key ={invitado} onClick={(e)=>{
+                                                        setInvitados([...invitados,{invitado: invitado._id, estado:'pendiente', fullName: invitado.nombre + ' '+ invitado.apellido }]);
+                                                        }}></input>
                                               </div>  
-                                            }
-                                        </div>
-                                        <button type="submit" onClick={()=>{handleSearch(invitado)}} className="btn btn-primary">Buscar</button>
+                                        <button type="submit" onClick={(e)=>{handleSearch(e)}} className="btn btn-primary">Buscar</button>
                                     </div>
                                     </div>
                                 </div>
 
                                 <div className="col-lg-6">
                                     <div className="form-group">
-                                        <label>Invitados <span className="errmsg">*</span></label>
-                                        <input value={tematica} onChange={e => setTematica(e.target.value)} className="form-control"></input>
+                                        <label>Lista de Invitados <span className="errmsg">*</span></label>
+                                        <div>
+                                            {
+                                                invitados.map((invitado, i) => (
+                                                    <div key={i} className="form-control">{invitado.fullName}</div>
+                                                ))
+                                            }
+                                        </div>
+                                        
                                 </div>
  
  
