@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const Customer = () => {
+const Invitar = () => {
     const [custlist, custupdate] = useState([]);
     const [haveedit, editchange] = useState(false);
     const [haveview, viewchange] = useState(false);
@@ -34,7 +34,7 @@ const Customer = () => {
         fetch("http://localhost:8000/roleaccess?role=" + userrole + "&menu=customer").then(res => {
             if (!res.ok) {
                 navigate('/');
-            toast.warning('You are not authorized to access');
+            toast.warning('Acceso denegado');
                 return false;
             }
             return res.json();
@@ -48,7 +48,7 @@ const Customer = () => {
                 removechange(userobj.havedelete);
             }else{
                 navigate('/');
-            toast.warning('You are not authorized to access');
+            toast.warning('Acceso denegado');
             }
         })
     }
@@ -57,7 +57,7 @@ const Customer = () => {
         if(haveadd){
         toast.success('added')
         }else{
-            toast.warning('You are not having access for add');
+            toast.warning('No se te permite agregar');
         }
     }
     const handleedit = () => {
@@ -65,7 +65,7 @@ const Customer = () => {
         toast.success('edited')
         }
         else{
-            toast.warning('You are not having access for Edit');
+            toast.warning('No se te permite editar');
         }
     }
 
@@ -73,7 +73,7 @@ const Customer = () => {
         if(haveremove){
         toast.success('removed')
         }else{
-            toast.warning('You are not having access for remove');
+            toast.warning('No se te permite eliminar');
         }
     }
 
@@ -83,30 +83,28 @@ const Customer = () => {
 
             <div className="card">
                 <div className="card-header">
-                    <h3>Customer Listing</h3>
+                    <h3>Lista de Invitados</h3>
                 </div>
                 <div className="card-body">
-                    <button onClick={handleadd} className="btn btn-success">Add (+)</button>
+                    <button onClick={handleadd} className="btn btn-success">Agregar Invitado (+)</button>
                     <br></br>
                     <table className="table table-bordered">
                         <thead className="bg-dark text-white">
                             <tr>
-                                <th>Code</th>
-                                <th>Name</th>
+                                <th>Nombre</th>
                                 <th>Email</th>
-                                <th>Action</th>
+                                <th>Telefono</th>
                             </tr>
                         </thead>
                         <tbody>
                             {custlist &&
                                 custlist.map(item => (
-                                    <tr key={item.code}>
-                                        <td>{item.code}</td>
-                                        <td>{item.name}</td>
+                                    <tr key={item.nombre}>
                                         <td>{item.email}</td>
+                                        <td>{item.telefono}</td>
                                         <td>
-                                            <button onClick={handleedit} className="btn btn-primary">Edit</button> |
-                                            <button onClick={handleremove} className="btn btn-danger">Remove</button>
+                                            <button onClick={handleedit} className="btn btn-primary">Editar</button> |
+                                            <button onClick={handleremove} className="btn btn-danger">Eliminar</button>
                                         </td>
 
                                     </tr>
@@ -120,4 +118,4 @@ const Customer = () => {
     );
 }
 
-export default Customer;
+export default Invitar;

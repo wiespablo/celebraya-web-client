@@ -4,27 +4,22 @@ import { toast } from "react-toastify";
 
 const Register = () => {
 
-    const [id, idchange] = useState("");
-    const [name, namechange] = useState("");
-    const [password, passwordchange] = useState("");
-    const [email, emailchange] = useState("");
-    const [phone, phonechange] = useState("");
-    const [country, countrychange] = useState("india");
-    const [address, addresschange] = useState("");
-    const [gender, genderchange] = useState("female");
+    const [nombre, setNombre] = useState("");
+    const [apellido, setApellido] = useState("");
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [telefono, setTelefono] = useState("");
+    const [direccion, setDireccion] = useState("");
+
 
     const navigate = useNavigate();
 
     const IsValidate = () => {
         let isproceed = true;
-        let errormessage = 'Please enter the value in ';
-        if (id === null || id === '') {
+        let errormessage = 'Por favor ingresar el valor en ';
+        if (nombre === null || nombre === '') {
             isproceed = false;
-            errormessage += ' Username';
-        }
-        if (name === null || name === '') {
-            isproceed = false;
-            errormessage += ' Fullname';
+            errormessage += ' Nombre';
         }
         if (password === null || password === '') {
             isproceed = false;
@@ -34,6 +29,18 @@ const Register = () => {
             isproceed = false;
             errormessage += ' Email';
         }
+        if (apellido === null || apellido === '') {
+            isproceed = false;
+            errormessage += ' Apellido';
+        }
+        if (direccion === null || direccion === '') {
+            isproceed = false;
+            errormessage += ' Direccion';
+        }
+        if (telefono === null || telefono === '') {
+            isproceed = false;
+            errormessage += ' Telefono';
+        }        
 
         if(!isproceed){
             toast.warning(errormessage)
@@ -42,7 +49,7 @@ const Register = () => {
 
             }else{
                 isproceed = false;
-                toast.warning('Please enter the valid email')
+                toast.warning('Por favor ingresar un mail');
             }
         }
         return isproceed;
@@ -51,10 +58,10 @@ const Register = () => {
 
     const handlesubmit = (e) => {
             e.preventDefault();
-            let regobj = { id, name, password, email, phone, country, address, gender };
+            let regobj = { nombre, apellido, email, telefono, password, direccion };
             if (IsValidate()) {
             //console.log(regobj);
-            fetch("http://localhost:8000/user", {
+            fetch(`${process.env.REACT_APP_API}/register`, {
                 method: "POST",
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(regobj)
@@ -72,65 +79,45 @@ const Register = () => {
                 <form className="container" onSubmit={handlesubmit}>
                     <div className="card">
                         <div className="card-header">
-                            <h1>User Registeration</h1>
+                            <h1>Registro de Usuario</h1>
                         </div>
                         <div className="card-body">
 
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="form-group">
-                                        <label>User Name <span className="errmsg">*</span></label>
-                                        <input value={id} onChange={e => idchange(e.target.value)} className="form-control"></input>
+                                        <label>Nombre <span className="errmsg">*</span></label>
+                                        <input value={nombre} onChange={e => setNombre(e.target.value)} className="form-control"></input>
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="form-group">
                                         <label>Password <span className="errmsg">*</span></label>
-                                        <input value={password} onChange={e => passwordchange(e.target.value)} type="password" className="form-control"></input>
+                                        <input value={password} onChange={e => setPassword(e.target.value)} type="password" className="form-control"></input>
                                     </div>
                                 </div>
-                                <div className="col-lg-6">
+                           <div className="col-lg-6">
                                     <div className="form-group">
-                                        <label>Full Name <span className="errmsg">*</span></label>
-                                        <input value={name} onChange={e => namechange(e.target.value)} className="form-control"></input>
+                                        <label>Apellido <span className="errmsg">*</span></label>
+                                        <input value={apellido} onChange={e => setApellido(e.target.value)} className="form-control"></input>
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="form-group">
                                         <label>Email <span className="errmsg">*</span></label>
-                                        <input value={email} onChange={e => emailchange(e.target.value)} className="form-control"></input>
+                                        <input value={email} onChange={e => setEmail(e.target.value)} className="form-control"></input>
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="form-group">
-                                        <label>Phone <span className="errmsg"></span></label>
-                                        <input value={phone} onChange={e => phonechange(e.target.value)} className="form-control"></input>
+                                        <label>Telefono <span className="errmsg"></span></label>
+                                        <input value={telefono} onChange={e => setTelefono(e.target.value)} className="form-control"></input>
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="form-group">
-                                        <label>Country <span className="errmsg">*</span></label>
-                                        <select value={country} onChange={e => countrychange(e.target.value)} className="form-control">
-                                            <option value="india">India</option>
-                                            <option value="usa">USA</option>
-                                            <option value="singapore">Singapore</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="col-lg-12">
-                                    <div className="form-group">
-                                        <label>Address</label>
-                                        <textarea value={address} onChange={e => addresschange(e.target.value)} className="form-control"></textarea>
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <div className="form-group">
-                                        <label>Gender</label>
-                                        <br></br>
-                                        <input type="radio" checked={gender === 'male'} onChange={e => genderchange(e.target.value)} name="gender" value="male" className="app-check"></input>
-                                        <label>Male</label>
-                                        <input type="radio" checked={gender === 'female'} onChange={e => genderchange(e.target.value)} name="gender" value="female" className="app-check"></input>
-                                        <label>Female</label>
+                                        <label>Direccion</label>
+                                        <input value={direccion} onChange={e => setDireccion(e.target.value)} className="form-control"></input>
                                     </div>
                                 </div>
 
@@ -138,8 +125,8 @@ const Register = () => {
 
                         </div>
                         <div className="card-footer">
-                            <button type="submit" className="btn btn-primary">Register</button> |
-                            <Link to={'/login'} className="btn btn-danger">Close</Link>
+                            <button type="submit" className="btn btn-primary">Registrar</button> |
+                            <Link to={'/login'} className="btn btn-danger">Cerrar</Link>
                         </div>
                     </div>
                 </form>

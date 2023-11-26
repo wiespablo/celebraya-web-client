@@ -2,20 +2,21 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Appheader = () => {
-    const [displayusername, displayusernameupdate] = useState('');
-    const [showmenu, showmenuupdateupdate] = useState(false);
+    const [userFullName, setUserFullName] = useState('');
+    const [showmenu, setShowMenu] = useState(false);
     const usenavigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
         if (location.pathname === '/login' || location.pathname === '/register') {
-            showmenuupdateupdate(false);
+            setShowMenu(false);
         } else {
-            showmenuupdateupdate(true);
-            let username = sessionStorage.getItem('username');
-            if (username === '' || username === null) {
+            setShowMenu(true);
+            let userId = localStorage.getItem('userId');
+            if (userId === '' || userId === null) {
                 usenavigate('/login');
             } else {
-                displayusernameupdate(username);
+                let fullName = localStorage.getItem('nombre') + ' ' + localStorage.getItem('apellido');
+                setUserFullName(fullName);
             }
         }
 
@@ -25,10 +26,10 @@ const Appheader = () => {
             {showmenu &&
                 <div className="header">
 
-                    <Link to={'/'}>Home</Link>
-                    <Link to={'/customer'}>Customer</Link>
-                    <span style={{ marginLeft: '70%' }}>Welcome <b>{displayusername}</b></span>
-                    <Link style={{ float: 'right' }} to={'/login'}>Logout</Link>
+                    <Link to={'/dashboard'}>Inicio </Link>
+                    <Link to={'/invitar'}>Invitar</Link>
+                    <span style={{ marginLeft: '20%' }}>Organizá tu evento <b>{userFullName}</b></span>
+                    <Link style={{ float: 'right' }} to={'/login'}>Salir</Link>
                 </div>
             }
         </div>
