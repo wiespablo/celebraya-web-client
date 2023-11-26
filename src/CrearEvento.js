@@ -1,15 +1,19 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
+import { Await, Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "bootstrap";
 
 const CrearEvento = () => {
 
+    const inputInvitado = useRef(0);
     const [tematica, setTematica] = useState("");
     const [lugar, setLugar] = useState("");
     const [fecha, setFecha] = useState("");
     const [direccion, setDireccion] = useState("");
     const [hora, setHora] = useState("");
+    const [evento, setEvento] = useState({});
+    const [invitados, setInvitados] = useState([]);
+    const [invitado, setInvitado] = useState({});
 
 
 
@@ -43,23 +47,45 @@ const CrearEvento = () => {
     }
 
     let token = localStorage.getItem('token');
-    
+
+    const handleSearch = async (e) =>{console.log(invitado);
+        const response = await fetch(`${process.env.REACT_APP_API}/usuario/buscar`, {
+            method: "POST",
+            headers:{  
+                'content-type': 'application/json',
+                'Authorization': 'bearer ' + token
+            },
+            body: JSON.stringify({text: invitado})
+        });
+        const resJson = await response.json()
+        console.log("invitado ==>",resJson);
+        setInvitado(resJson);
+    }
 
     const handlesubmit = (e) => {
             e.preventDefault();
-            let regobj = { tematica, lugar, fecha, direccion, hora};
+            setEvento({
+                tematica:tematica,
+                lugar:lugar,
+                fecha:fecha,
+                direccion:direccion,
+                hora:hora,
+                anfitrion:localStorage.getItem('userId'),
+                lista_invitados: invitados
+            })
+
             if (IsValidate()) {
-            console.log(regobj);
+                console.log(evento);
             fetch(`${process.env.REACT_APP_API}/evento/crear`, {
                 method: "POST",
                 headers:{  
                     'content-type': 'application/json',
                     'Authorization': 'bearer ' + token
                 },
-                body: JSON.stringify(regobj)
+                body: JSON.stringify(evento)
             }).then((res) => {
                 toast.success('Registro Exitoso')
-                navigate('/Evento');
+                navigate('/dashboard');
             }).catch((err) => {
                 toast.error('Failed :' + err.message);
             });
@@ -106,7 +132,33 @@ const CrearEvento = () => {
                                         <input value={hora} onChange={e => setHora(e.target.value)} type="time" className="form-control"></input>
                                     </div>
                                 </div>
+
+
+                                <div className="col-lg-6">
+                                    <div className="form-group">
+                                        <label>Buscar Invitado <span className="errmsg">*</span></label>
+                                        <input onChange={e => setInvitado(e.target.value)} className="form-control"></input>
+                                        <div>
+                                            {
+                                              <div value={invitado} key ={invitado} onClick={(e)=>{setInvitados({invitado: e._id, estado:'pendiente' })}}>
+
+                                              </div>  
+                                            }
+                                        </div>
+                                        <button type="submit" onClick={()=>{handleSearch(invitado)}} className="btn btn-primary">Buscar</button>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-6">
+                                    <div className="form-group">
+                                        <label>Invitados <span className="errmsg">*</span></label>
+                                        <input value={tematica} onChange={e => setTematica(e.target.value)} className="form-control"></input>
+                                </div>
+ 
+ 
                             </div>
+
 
                         </div>
                         <div className="card-footer">

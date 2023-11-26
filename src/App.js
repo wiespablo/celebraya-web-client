@@ -8,8 +8,7 @@ import CrearEvento from './CrearEvento';
 import { ToastContainer } from 'react-toastify';
 import Appheader from './Appheader';
 import Invitar from './Invitar';
-
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (

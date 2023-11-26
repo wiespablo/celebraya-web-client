@@ -7,20 +7,28 @@ const Dashboard =  () => {
     const [eventList, setEventList] = useState([]);
 
     let token = localStorage.getItem('token');
-    
-    fetch(`${process.env.REACT_APP_API}/usuario/eventos`, {
-            headers: {
-                'Authorization': 'bearer ' + token
-            }
-        }).then((res) =>{
-            eventList();
-            return res.json();
-        }).then((res=>{
-            console.log(res);
-            setEventList(res);
-        }));
-        console.log("estado ==> ",eventList);
+    const handleEventos = ( )=>{
+        fetch(`${process.env.REACT_APP_API}/usuario/eventos`, {
+                headers: {
+                    'Authorization': 'bearer ' + token
+                }
+            })
+                .then((res) =>{
+                return res.json();
+            })
+                .then((res=>{
+                console.log(res);
+                setEventList(res);
+            }));
 
+    }
+    useEffect(() => {
+        if (eventList.length == 0) {
+            console.log();
+            handleEventos();    
+        }
+    }, [eventList])
+    
     return (
         <div>
             
@@ -28,54 +36,32 @@ const Dashboard =  () => {
             <div className="card-footer">
                 <Link to={'/CrearEvento'} className="btn btn-primary">Crear Evento</Link>
             </div>
-                     { <table className="table table-bordered">
-                <thead>
-                    <tr>
-                        <td>Lugar</td>
-                        <td>Fecha</td>
-                        <td>Dirección</td>
-                        <td>Hora</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    {
-                        eventList.map(item => (
-                            <tr key={item.tematica}>
-                                <td>{item.lugar}</td>
-                                <td>{item.fecha}</td>
-                                <td>{item.direccion}</td>
-                                <td>{item.hora}</td>
-                            </tr>
-                        ))
-                    }
-                </tbody>
-                <thead>
-                    <tr>
-                        <td>Tematica</td>
-                        <td>Lugar</td>
-                        <td>Fecha</td>
-                        <td>Direccion</td>
-                        <td>Hora</td>                        
-                    </tr>
-                </thead>
-                <tbody>
-                {
-                    
-                    eventList.map((val,key)=>{
-                        return <tr className="">
-                            <td>{val.tematica}</td>
-                            <td>{val.lugar}</td>
-                            <td>{val.fecha}</td>
-                            <td>{val.direccion}</td>
-                            <td>{val.hora}</td>
-                            </tr>
-                    })
-                }
-                </tbody>
-                
+                { <table className="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Tematica</td>                        
+                            <td>Lugar</td>
+                            <td>Fecha</td>
+                            <td>Dirección</td>
+                            <td>Hora</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {console.log(eventList)}
+                        {
+                            eventList.map((item, key) => (
+                                <tr key={key}>
+                                    <td>{item.tematica}</td>
+                                    <td>{item.lugar}</td>
+                                    <td>{item.fecha}</td>
+                                    <td>{item.direccion}</td>
+                                    <td>{item.hora}</td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
 
-            </table> }
+                </table> }
         </div>
     );
 }
