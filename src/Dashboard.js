@@ -79,7 +79,10 @@ const Dashboard =  () => {
 
 */
     <div className="containter">
-    
+        <h1 className="text-center">Mis Eventos</h1>
+        <div className="card-footer text-center">
+            <Link to={'/CrearEvento'} className="btn btn-primary">Crear Evento</Link>
+        </div>    
         <div>
             <table className="table table-striped">
                 <thead>
@@ -100,7 +103,8 @@ const Dashboard =  () => {
                         <td>{item.fecha}</td>
                         <td>{item.direccion}</td>
                         <td>{item.hora}</td>
-                        <td><button disabled ={ item.anfitrion == userId ? false : true} >editar</button></td>
+                        <td><button>ver</button></td>                        
+                        <td><button>editar</button></td>
                         <td><button>eliminar</button></td>
                     </tr>
                 ))}

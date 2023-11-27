@@ -57,8 +57,7 @@ const CrearEvento = () => {
             },
             body: JSON.stringify({text: invitado})
         });
-        const resJson = await response.json()
-        console.log("invitado ==>",resJson);
+        const resJson = await response.json();
         setInvitado(resJson);
     }
 
@@ -94,7 +93,6 @@ const CrearEvento = () => {
                             <h1>Crear Evento</h1>
                         </div>
                         <div className="card-body">
-
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="form-group">
@@ -139,36 +137,36 @@ const CrearEvento = () => {
                                               </div>  
                                         <button type="submit" onClick={(e)=>{handleSearch(e)}} className="btn btn-primary">Buscar</button>
                                     </div>
-                                    </div>
                                 </div>
+                            </div>
 
                                 <div className="col-lg-6">
                                     <div className="form-group">
-                                        <label>Lista de Invitados <span className="errmsg">*</span></label>
-                                        <div>
-                                            {
-                                                invitados.map((invitado, i) => (
-                                                    <div key={i} className="form-control">{invitado.fullName}</div>
-                                                ))
-                                            }
-                                        </div>
-                                        
+                                    <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col">Lista de Invitados</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
+                                    invitados.map((invitado, i, key) => (
+                                        <tr scope="row">
+                                            <td key={i} className="form-control">{invitado.fullName}</td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                    </table>
                                 </div>
- 
- 
                             </div>
-
-
+                            <div className="card-footer">
+                                <button type="submit" className="btn btn-primary">Crear</button> |
+                                <Link to={'/dashboard'} className="btn btn-danger">Cerrar</Link>
+                            </div>
                         </div>
-                        <div className="card-footer">
-                            <button type="submit" className="btn btn-primary">Crear</button> |
-                            <Link to={'/dashboard'} className="btn btn-danger">Cerrar</Link>
-                        </div>
-                    </div>
+                    </div>                    
                 </form>
             </div>
-
-
         </div>
     );
 }

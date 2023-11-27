@@ -47,3 +47,8 @@
                 }
                 </tbody>
                 
+
+
+para desabilitar boton y que no acceda si no es anfitrion
+                        <td><button disabled ={ item.anfitrion == userId ? false : true} >editar</button></td>
+            
