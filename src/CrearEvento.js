@@ -67,7 +67,7 @@ const CrearEvento = () => {
         const lista_invitados = invitados.map(({fullName, ...rest}) => rest);
         const anfitrion = localStorage.getItem('userId');
         const obj = {tematica,lugar,fecha,hora,direccion,anfitrion, lista_invitados }
-        console.log('obj ==> ', obj);
+        
         if (IsValidate()) {
             
             fetch(`${process.env.REACT_APP_API}/evento/crear`, {
