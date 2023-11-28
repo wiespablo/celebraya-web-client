@@ -49,6 +49,20 @@
                 
 
 
-para desabilitar boton y que no acceda si no es anfitrion
+#######para desabilitar boton y que no acceda si no es anfitrion
                         <td><button disabled ={ item.anfitrion == userId ? false : true} >editar</button></td>
-            
+
+
+#######Rutas
+
+router.post('/register', userController.register)
+router.post('/login', userController.login)
+router.put('/usuario/actualizar-password', userMiddleware, userController.updatePass);
+router.post('/usuario/buscar', userMiddleware, userController.search);
+router.get('/usuario/eventos', userMiddleware, eventoController.misEventos );
+router.get('/usuario/invitaciones', userMiddleware, userController.invitaciones );
+router.post('/usuario/confirmar:eventId', userMiddleware, userController.confirmarInvitacion );
+router.post('/evento/crear', userMiddleware, eventoController.register);
+router.get('/evento/ver/:id', userMiddleware, eventoController.verEvento );
+router.get('/evento/asignaciones/:id', userMiddleware, eventoController.verAsignaciones );
+router.post('/evento/eliminar/:id', userMiddleware, eventoController.eliminar );

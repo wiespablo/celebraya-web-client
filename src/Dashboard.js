@@ -1,8 +1,13 @@
 import { Button } from "bootstrap";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { EventContext } from "./EventContext";
+import { useContext } from "react";
+
+
 
 const Dashboard =  () => {
+    const {setEventData} = useContext(EventContext);
     const navigate = useNavigate();
     const [eventList, setEventList] = useState([]);
     const [userId, setUserId] = useState('');
@@ -33,51 +38,6 @@ const Dashboard =  () => {
     
     return (
 
-
-
-/*
-        <div>
-            
-            <h1 className="text-center">Mis Eventos</h1>
-            <div className="card-footer">
-                <Link to={'/CrearEvento'} className="btn btn-primary">Crear Evento</Link>
-            </div>
-                { <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <td>Tematica</td>                        
-                            <td>Lugar</td>
-                            <td>Fecha</td>
-                            <td>Dirección</td>
-                            <td>Hora</td>
-                            <td>Editar</td>
-                            <td>Eliminar</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {console.log(eventList)}
-                        {
-                            eventList.map((item, key) => (
-                                <tr key={key}>
-                                    <td>{item.tematica}</td>
-                                    <td>{item.lugar}</td>
-                                    <td>{item.fecha}</td>
-                                    <td>{item.direccion}</td>
-                                    <td>{item.hora}</td>
-                                    <td><button disabled ={ item.anfitrion == userId ? false : true} >ok</button></td>
-                                    <td><button>ok</button></td>
-                                    
-
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-
-                </table> }
-        </div>
-
-
-*/
     <div className="containter">
         <h1 className="text-center">Mis Eventos</h1>
         <div className="card-footer text-center">
@@ -103,9 +63,24 @@ const Dashboard =  () => {
                         <td>{item.fecha}</td>
                         <td>{item.direccion}</td>
                         <td>{item.hora}</td>
-                        <td><button>ver</button></td>                        
-                        <td><button>editar</button></td>
-                        <td><button>eliminar</button></td>
+                        <td>
+                            <div className="btn-group" role="group" aria-label="Basic example">
+                            {/* Usar Link directamente en lugar de alrededor de un botón */}
+                            {console.log(item.id)}
+                                <Link onClick={()=> { setEventData(item)} } to={`/verEvento`} className="btn btn-outline-success text-dark">
+                                Ver
+                                </Link>
+                                
+                           
+                                <Link to={`/editarEvento/${item.userId}`} className="btn btn-outline-warning text-dark">
+                                Editar
+                                </Link>
+                                
+                                <button type="button" className="btn btn-outline-danger text-dark">
+                                Eliminar
+                                </button>
+                            </div>
+                        </td>   
                     </tr>
                 ))}
 
