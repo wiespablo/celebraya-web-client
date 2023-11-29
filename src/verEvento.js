@@ -1,24 +1,79 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { toast } from "react-toastify";
 import { EventContext } from "./EventContext";
 
 
 
+
+
 const VerEvento = () => {
+
+
+
   const navigate = useNavigate();
   const {eventData, setEventData} = useContext(EventContext);
-  const { id } = useParams();
-  const [evento, setEvento] = useState(null);
-
+  const [evento, setEvento] = useState("");
   let token = localStorage.getItem('token');
-  console.log(eventData);
+
+
+const handleAgregar = async (e, inv)=>{
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API}/evento/agregarinvitado/${eventData._id}`,{
+        method:'PUT',
+        headers:{
+          'Authorization': 'bearer' + token,
+          'Content-Type': 'application/json', 
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(inv)
+      });
+      if (response.status == 201) {
+        toast.success('eliminacion exitosa');
+      } else {
+        toast.error('hubo un error');
+      }     
+    } catch (error) {
+      console.log(error);
+      
+    }
+
+
+}
+const handleEliminarInv = async (e, inv)=>{
+  try {
+    /**
+     * Un Fetch permite obtener información de una ruta de una API mediante su ruta y 
+     * las credenciales solicitadas por la misma.
+     */
+    const response = await fetch(`${process.env.REACT_APP_API}/evento/eliminarinvitado/${eventData._id}`,{
+      method:'PUT',
+      headers:{
+        'Authorization': 'bearer ' + token,
+        'Content-Type': 'application/json', 
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(inv)
+    });
+    if (response.status == 201) {
+      toast.success('eliminacion exitosa');
+    } else {
+      toast.error('hubo un error');
+    }     
+  } catch (error) {
+    console.log(error);
+    
+  }
+
+
+}
 const handleEventos = async ()=> {
   const response = await fetch(`${process.env.REACT_APP_API}/evento/ver/${eventData._id}`,{
     headers: {
       'Authorization': 'bearer ' + token}
    });
+   
    const currentEvent = await response.json();
    if (response.status == 200) {
         setEventData(currentEvent);
@@ -30,15 +85,13 @@ const handleEventos = async ()=> {
   }
 
   useEffect(() => { 
-    const datosSimulados = {
-      tematica: 'Nombre del Evento',
-      lugar: 'Ubicación del Evento',
-      fecha: 'Fecha del Evento',
-      direccion: 'Dirección del Evento',
-      hora: 'Hora del Evento',
-    };
-    setEvento(datosSimulados);
-  }, [id]);
+    if (evento == "") {
+      setEvento(eventData);
+      console.log('Evento ==>',evento);
+    }
+
+
+  }, [evento]);
 
   return (
     <div>
@@ -82,16 +135,17 @@ const handleEventos = async ()=> {
                 </thead>
                 <tbody>
                 {
-                eventData.lista_invitados.map((item, key) => (
+                  eventData &&
+                  eventData?.lista_invitados?.map((item, key) => (
                     <tr scope="row" key={key}>
-                        <td>{item.invitado.nombre + " " + item.invitado.apellido}</td>
-                        <td>{item.estado}</td>
+                        <td>{item?.invitado?.nombre + " " + item?.invitado?.apellido}</td>
+                        <td>{item?.estado}</td>
 
 
                         <td>
                             <div className="btn-group" role="group" aria-label="Basic example">
                             {/* Usar Link directamente en lugar de alrededor de un botón */}                                                                             
-                                <button type="button" className="btn btn-outline-danger text-dark">
+                                <button type="button" className="btn btn-outline-danger text-dark" onClick = {(e)=>{ handleEliminarInv(e, {invitado:item.invitado._id, estado:item.invitado.estado, _id:item._id}) }}>
                                 Eliminar
                                 </button>
                             </div>

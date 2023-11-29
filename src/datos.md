@@ -1,3 +1,58 @@
+Casos de Uso:
+- Registrar Usuario
+- Login
+- Crear Evento
+- Modificar Evento
+- Eliminar Evento
+- Eliminar Invitado
+- Buscar Usuario
+- Ver Eventos
+- Ver un Evento
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <thead>
                     <tr>
                         <td>Tematica</td>
@@ -83,3 +138,50 @@ router.post('/evento/eliminar/:id', userMiddleware, eventoController.eliminar );
          return response.text();
        })
        .then((text)=> console.error('Respuesta del servidor: ', text));
+
+       ##
+       Persistencia en el almacenamiento local:
+
+Almacena la información clave en el almacenamiento local (localStorage) para que pueda persistir incluso después de recargar la página. Esto significa que cuando la aplicación se carga, puedes verificar si hay datos en el almacenamiento local y, en caso afirmativo, inicializar el contexto con esos datos.
+jsx
+Copy code
+// Al cargar la aplicación
+useEffect(() => {
+  const storedEventData = localStorage.getItem('eventData');
+  if (storedEventData) {
+    setEventData(JSON.parse(storedEventData));
+  }
+}, []);
+
+// En cualquier lugar donde actualices eventData
+setEventData(newEventData);
+localStorage.setItem('eventData', JSON.stringify(newEventData));
+Recuperación de datos del servidor:
+
+Cuando recargas la página, puedes hacer una solicitud al servidor para recuperar los datos necesarios y luego actualizar el contexto con esos datos.
+jsx
+Copy code
+// Al cargar la aplicación
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API}/ruta-de-datos`, {
+        headers: {
+          Authorization: 'bearer ' + token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setEventData(data);
+      } else {
+        // Manejar el error según sea necesario
+      }
+    } catch (error) {
+      console.error('Error al recuperar datos del servidor:', error);
+    }
+  };
+
+  fetchData();
+}, []);
+El enfoque que elijas depende de la naturaleza de tu aplicación y de cómo desees manejar la persistencia de datos a través de recargas de página.

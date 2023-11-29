@@ -10,12 +10,6 @@ const CrearEvento = () => {
     const [hora, setHora] = useState("");
     const [invitados, setInvitados] = useState([]);
     const [invitado, setInvitado] = useState({});
-    console.log(invitados);
-
-    console.log(tematica);
-
-
-
     const navigate = useNavigate();
 
     const IsValidate = () => {
@@ -131,8 +125,10 @@ const CrearEvento = () => {
                                         <label>Buscar Invitado <span className="errmsg">*</span></label>
                                         <input  onChange={e => setInvitado(e.target.value)} className="form-control"></input>                
                                               <div>
-                                                    <input defaultValue={invitado && invitado.nombre ? invitado.nombre + ' ' + invitado.apellido: ''} key ={invitado} onClick={(e)=>{
-                                                        setInvitados([...invitados,{invitado: invitado._id, estado:'pendiente', fullName: invitado.nombre + ' '+ invitado.apellido }]);
+                                                    <input defaultValue={invitado && invitado.nombre ? invitado.nombre + ' ' + invitado.apellido: ''} key ={invitado} 
+                                                    onClick={(e)=>{
+                                                        invitado && setInvitados([...invitados,{invitado: invitado._id, estado:'pendiente', fullName: invitado.nombre + ' '+ invitado.apellido }]);
+                                                        setInvitado()
                                                         }}></input>
                                               </div>  
                                         <button type="submit" onClick={(e)=>{handleSearch(e)}} className="btn btn-primary">Buscar</button>

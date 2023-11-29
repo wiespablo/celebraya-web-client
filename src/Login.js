@@ -88,8 +88,15 @@ import { toast } from "react-toastify";
                             </div>
                         </div>
                         <div className="card-footer">
-                            <button type="submit" className="btn btn-primary">Inicio</button> |
-                            <Link className="btn btn-success" to={'/register'}>Nuevo Usuario</Link>
+                            <button type="submit" className="btn btn-outline-primary">Inicio</button> |
+                            <Link  to={'/register'}>
+                            <button className="btn btn-outline-success">
+                                Nuevo Usuario
+                                </button>
+                                </Link>
+                            
+                              
+                               
                         </div>
                     </div>
                 </form>

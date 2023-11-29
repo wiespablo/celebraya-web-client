@@ -4,15 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { EventContext } from "./EventContext";
 import { useContext } from "react";
 
-
-
 const Dashboard =  () => {
     const {setEventData} = useContext(EventContext);
     const navigate = useNavigate();
     const [eventList, setEventList] = useState([]);
     const [userId, setUserId] = useState('');
     let token = localStorage.getItem('token');
-    console.log(token);
     const handleDelete = async (id)=>{
         window.alert("Está seguro que desea eliminar");
         const response = await fetch(`${process.env.REACT_APP_API}/evento/eliminar/${id}`, {
@@ -46,7 +43,6 @@ const Dashboard =  () => {
     useEffect(() => {
         setUserId(localStorage.getItem('userId'));
         if (eventList.length == 0) {
-            console.log();
             handleEventos();    
         }
     }, [eventList])
@@ -81,11 +77,9 @@ const Dashboard =  () => {
                         <td>
                             <div className="btn-group" role="group" aria-label="Basic example">
                             {/* Usar Link directamente en lugar de alrededor de un botón */}
-                                <Link onClick={()=> { setEventData(item)} } to={`/verEvento`} className="btn btn-outline-success text-dark">
+                                <Link onClick={()=> { setEventData(item)}} to={`/verEvento`} className="btn btn-outline-success text-dark">
                                 Ver
                                 </Link>
-                                
-                           
                                 <Link onClick={()=> { setEventData(item)}}    to={`/editarEvento`} className="btn btn-outline-warning text-dark">
                                 Editar
                                 </Link>
