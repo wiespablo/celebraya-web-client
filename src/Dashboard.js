@@ -12,6 +12,22 @@ const Dashboard =  () => {
     const [eventList, setEventList] = useState([]);
     const [userId, setUserId] = useState('');
     let token = localStorage.getItem('token');
+    console.log(token);
+    const handleDelete = async (id)=>{
+        window.alert("Está seguro que desea eliminar");
+        const response = await fetch(`${process.env.REACT_APP_API}/evento/eliminar/${id}`, {
+            method:'DELETE',
+            headers: {
+                'Authorization': 'bearer ' + token
+            }
+        });
+        if (response.status == 200) {
+            window.alert('El evento se eliminó exitosamente');
+            handleEventos();
+        } else {
+            
+        }
+    }
 
     const handleEventos = ( )=>{
         fetch(`${process.env.REACT_APP_API}/usuario/eventos`, {
@@ -23,7 +39,6 @@ const Dashboard =  () => {
                 return res.json();
             })
                 .then((res=>{
-                console.log(res);
                 setEventList(res);
             }));
 
@@ -66,17 +81,16 @@ const Dashboard =  () => {
                         <td>
                             <div className="btn-group" role="group" aria-label="Basic example">
                             {/* Usar Link directamente en lugar de alrededor de un botón */}
-                            {console.log(item.id)}
                                 <Link onClick={()=> { setEventData(item)} } to={`/verEvento`} className="btn btn-outline-success text-dark">
                                 Ver
                                 </Link>
                                 
                            
-                                <Link to={`/editarEvento/${item.userId}`} className="btn btn-outline-warning text-dark">
+                                <Link onClick={()=> { setEventData(item)}}    to={`/editarEvento`} className="btn btn-outline-warning text-dark">
                                 Editar
                                 </Link>
                                 
-                                <button type="button" className="btn btn-outline-danger text-dark">
+                                <button onClick = {(e)=>{handleDelete(item._id)}} type="button" className="btn btn-outline-danger text-dark">
                                 Eliminar
                                 </button>
                             </div>

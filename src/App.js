@@ -8,9 +8,10 @@ import Register from './Register';
 import CrearEvento from './CrearEvento';
 import { ToastContainer } from 'react-toastify';
 import Appheader from './Appheader';
-import Invitar from './Invitar';
+import Perfil from './Perfil';
 import Dashboard from './Dashboard';
 import VerEvento from './verEvento';
+import EditarEvento from './editarEvento';
 import  {EventProvider} from './EventContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -24,13 +25,12 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login/>}></Route>
         <Route path='/register' element={<Register/>}></Route>
-        <Route path='/Invitar' element={<Invitar/>}></Route>
+        <Route path='/Perfil' element={<Perfil/>}></Route>
         <Route path='/dashboard' element={<Dashboard/>}></Route>
         <Route path='/CrearEvento' element={<CrearEvento/>}></Route>
         <Route path='/verEvento' element={<VerEvento/>}></Route>
-
- 
-        
+        <Route path='/editarEvento' element={<EditarEvento/>}></Route>
+      
       </Routes>
     
       </BrowserRouter>

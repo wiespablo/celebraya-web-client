@@ -27,7 +27,7 @@ const Appheader = () => {
                 <div className="header">
 
                     <Link to={'/dashboard'}>Inicio </Link>
-                    <Link to={'/invitar'}>Invitar</Link>
+                    <Link to={'/perfil'}>Perfil</Link>
                     <span style={{ marginLeft: '20%' }}>Organizá tu evento <b>{userFullName}</b></span>
                     <Link style={{ float: 'right' }} to={'/login'}>Salir</Link>
                 </div>

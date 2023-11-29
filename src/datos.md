@@ -66,3 +66,20 @@ router.post('/evento/crear', userMiddleware, eventoController.register);
 router.get('/evento/ver/:id', userMiddleware, eventoController.verEvento );
 router.get('/evento/asignaciones/:id', userMiddleware, eventoController.verAsignaciones );
 router.post('/evento/eliminar/:id', userMiddleware, eventoController.eliminar );
+
+
+
+#### lo que sobraba del fetch
+
+       .then((response) => {
+        if(!response.ok){
+          throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
+        } 
+        return response.json();
+      })
+       .then((data) => setEvento(data))
+       .catch((error)=> {
+         console.error('Error al procesar la respuesta del servidor: ', error);
+         return response.text();
+       })
+       .then((text)=> console.error('Respuesta del servidor: ', text));
